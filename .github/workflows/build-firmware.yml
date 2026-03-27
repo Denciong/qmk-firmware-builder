@@ -44,6 +44,9 @@ jobs:
       run: |
         mkdir -p qmk_firmware/keyboards/
         cp -rup ./keyboards/* ./qmk_firmware/keyboards/
+    - name: Patch AVR-specific files for RP2040
+      run: |
+        sed -i 's/#define PIN_LED.*F0/#define PIN_LED NO_PIN/' ./qmk_firmware/keyboards/nullbitsco/common/bitc_led.h
     - name: Compile Custom Firmware
       working-directory: ./qmk_firmware
       run: |
