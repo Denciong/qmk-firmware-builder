@@ -46,9 +46,16 @@ jobs:
         cp -rup ./keyboards/* ./qmk_firmware/keyboards/
     - name: Patch AVR-specific files for RP2040
       run: |
-        echo "" > ./qmk_firmware/keyboards/nullbitsco/common/bitc_led.c
-        echo "" > ./qmk_firmware/keyboards/nullbitsco/common/remote_kb.c
-         cat > ./qmk_firmware/platforms/chibios/drivers/uart_sio.c << 'EOF'
+        cat > ./qmk_firmware/keyboards/nullbitsco/common/bitc_led.c << 'EOF'
+        #include "bitc_led.h"
+        void set_bitc_LED(uint8_t mode) {}
+        EOF
+        cat > ./qmk_firmware/keyboards/nullbitsco/common/remote_kb.c << 'EOF'
+        #include "remote_kb.h"
+        void matrix_init_remote_kb(void) {}
+        void matrix_scan_remote_kb(void) {}
+        EOF
+        cat > ./qmk_firmware/platforms/chibios/drivers/uart_sio.c << 'EOF'
         #include <stdint.h>
         #include <stdbool.h>
         void uart_init(uint32_t baud) {}
