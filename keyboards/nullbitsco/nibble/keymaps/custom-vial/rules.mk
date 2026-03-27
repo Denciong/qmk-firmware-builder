@@ -20,4 +20,3 @@ UNICODE_ENABLE = yes
 
 # Override AVR-specific features for RP2040
 CUSTOM_MATRIX = no
-SRC := $(filter-out keyboards/nullbitsco/common/bitc_led.c, $(SRC))
