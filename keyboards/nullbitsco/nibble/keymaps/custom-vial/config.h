@@ -22,7 +22,3 @@
 // Disable SIO driver not needed for RP2040 conversion
 #undef HAL_USE_SIO
 #define HAL_USE_SIO FALSE
-
-// Disable AVR-specific LED pin for RP2040
-#undef PIN_LED
-#define PIN_LED NO_PIN
