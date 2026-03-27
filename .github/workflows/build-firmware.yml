@@ -47,6 +47,7 @@ jobs:
     - name: Patch AVR-specific files for RP2040
       run: |
         echo "" > ./qmk_firmware/keyboards/nullbitsco/common/bitc_led.c
+        echo "" > ./qmk_firmware/keyboards/nullbitsco/common/remote_kb.c
     - name: Compile Custom Firmware
       working-directory: ./qmk_firmware
       run: |
