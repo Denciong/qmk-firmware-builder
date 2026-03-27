@@ -17,3 +17,6 @@ QMK_SETTINGS = no
 ENCODER_MAP_ENABLE = yes
 TAP_DANCE_ENABLE = yes
 UNICODE_ENABLE = yes
+
+# Override AVR-specific custom matrix for RP2040
+CUSTOM_MATRIX = no
