@@ -47,12 +47,13 @@ jobs:
     - name: Compile Custom Firmware
       working-directory: ./qmk_firmware
       run: |
-        make nullbitsco/nibble/rp2040:custom-vial
-
+        make nullbitsco/nibble:custom-vial CONVERT_TO=bit_c_pro 2>&1
+        echo "Exit code: $?"
     - name: Find output files
       run: |
         find ./qmk_firmware -name "*.uf2" -o -name "*.hex" -o -name "*.bin" 2>/dev/null
-
+        echo "--- checking .build ---"
+        find ./qmk_firmware/.build -type f 2>/dev/null || echo "No .build folder found"
     - name: Upload compiled firmware (build artifact)
       uses: actions/upload-artifact@v4
       with:
