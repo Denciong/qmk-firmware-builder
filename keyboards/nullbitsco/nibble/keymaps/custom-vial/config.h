@@ -17,4 +17,8 @@
 
 /* Reduce number of layers */
 
-#define DYNAMIC_KEYMAP_LAYER_COUNT 2
+#define DYNAMIC_KEYMAP_LAYER_COUNT 8
+
+// Disable SIO driver not needed for RP2040 conversion
+#undef HAL_USE_SIO
+#define HAL_USE_SIO FALSE
