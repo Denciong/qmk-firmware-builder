@@ -2,19 +2,18 @@
 VIA_ENABLE = yes
 VIAL_ENABLE = yes
 
-# Compile with LTO to reduce size
-LTO_ENABLE = yes
+# Disable LTO (not reliable on RP2040)
+LTO_ENABLE = no
 
-# Disable the following features
+# Disable unused features
 CONSOLE_ENABLE = no
 MOUSEKEY_ENABLE = yes
 KEY_OVERRIDE_ENABLE = no
 MAGIC_ENABLE = no
 COMMAND_ENABLE = no
 
-# Enable the following features
+# Enable features
 QMK_SETTINGS = no
 ENCODER_MAP_ENABLE = yes
-# VIAL_ENCODERS_ENABLE = yes # No idea  if this is needed
+TAP_DANCE_ENABLE = yes
 UNICODE_ENABLE = yes
-AVR_USE_MINIMAL_PRINTF = yes
