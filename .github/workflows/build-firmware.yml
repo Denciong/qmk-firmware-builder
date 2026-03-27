@@ -1,27 +1,29 @@
-name: Build Custom Firmaware
-
+name: Build Custom Firmware
 on:
   push:
   workflow_dispatch:
-
 env:
   QMK_REPO: vial-kb/vial-qmk
   QMK_BRANCH: vial
-
 jobs:
   build:
     runs-on: ubuntu-latest
     container: qmkfm/qmk_cli
-
     steps:
-
     - name: Checkout custom keymaps
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    
+
+    - name: Pin Python to 3.11
+      run: |
+        apt-get update -qq && apt-get install -y python3.11 python3.11-venv python3.11-dev
+        update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
+        curl -sSf https://astral.sh/uv/install.sh | sh
+        ~/.local/bin/uv tool install qmk --python 3.11
+
     - name: Clone QMK fork
-      run: | 
+      run: |
         git clone --no-checkout https://github.com/$QMK_REPO.git --depth 1 --branch $QMK_BRANCH ./qmk_firmware
 
     - name: Determine & Checkout relevant keyboards
@@ -29,7 +31,7 @@ jobs:
       run: |
         git config core.sparsecheckout true
         printf '/*\n!/keyboards\n' > .git/info/sparse-checkout
-        for kb in $(find ../keyboards -depth -type d |  awk '$0 !~ /keymaps/' | awk -F / 'NF>=p; {p=NF}' |sed 's/..//'); do echo "$kb/*" >> .git/info/sparse-checkout; done;
+        for kb in $(find ../keyboards -depth -type d | awk '$0 !~ /keymaps/' | awk -F / 'NF>=p; {p=NF}' | sed 's/..//'); do echo "$kb/*" >> .git/info/sparse-checkout; done;
         printf '!/keyboards/**/keymaps\n' >> .git/info/sparse-checkout
         git checkout $QMK_BRANCH --
 
@@ -42,7 +44,7 @@ jobs:
       run: |
         mkdir -p qmk_firmware/keyboards/
         cp -rup ./keyboards/* ./qmk_firmware/keyboards/
-        
+
     - name: Compile Custom Firmware
       working-directory: ./qmk_firmware
       run: |
@@ -55,6 +57,7 @@ jobs:
         path: |
           ./qmk_firmware/*.hex
           ./qmk_firmware/*.bin
+          ./qmk_firmware/*.uf2
 
     - name: Upload compiled firmware (tagged release)
       uses: softprops/action-gh-release@v2
@@ -63,3 +66,4 @@ jobs:
         files: |
           ./qmk_firmware/*.hex
           ./qmk_firmware/*.bin
+          ./qmk_firmware/*.uf2
